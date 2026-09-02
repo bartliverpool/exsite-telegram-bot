@@ -4,6 +4,9 @@ on:
   schedule:
     # Uruchamiaj automatycznie co 15 minut
     - cron: '*/15 * * * *'
+  push:
+    branches:
+      - main
   workflow_dispatch: # Przycisk "Run workflow" do ręcznego testu w GitHub Actions
 
 jobs:
@@ -21,6 +24,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+
+      - name: Diagnostic curl check
+        run: |
+          echo "=== Testing curl from GitHub Actions runner ==="
+          curl -i -s -L "https://exsite.pl/index.php?mod=rss" | head -n 30 || true
 
       - name: Run releases check
         env:
